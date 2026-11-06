@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="autoclaw-local-html://f36faa85-2e01-49a4-b18a-6c09ca3e827d/C%3A/Users/dgarn/.openclaw-autoclaw/workspace/bookmark-stack/tech-atlas/ui/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tech Atlas — technologies found in your bookmark corpus</title>
+<style>
+  :root{
+    --bg:#0b1220; --bg2:#0e1626; --card:#121c2f; --card2:#16233a;
+    --line:#24344f; --line2:#2c3f61;
+    --text:#e6edf7; --dim:#9fb0cc; --dim2:#7d8fb0;
+    --accent:#6ea8ff; --good:#8bd450; --warn:#ffd166; --pink:#ff6b9d;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,Arial,sans-serif;
+    background:radial-gradient(1200px 500px at 15% -10%, #16233f 0%, var(--bg) 60%);
+    color:var(--text);
+    display:flex; flex-direction:column; min-height:100vh;
+  }
+  header{
+    padding:18px 26px 14px; border-bottom:1px solid var(--line);
+    display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  }
+  .brand h1{font-size:20px; letter-spacing:.2px}
+  .brand h1 span{color:var(--accent)}
+  .brand .sub{font-size:12.5px; color:var(--dim); margin-top:3px}
+  .stats{display:flex; gap:8px; flex-wrap:wrap; margin-left:auto}
+  .chip{font-size:12px; padding:5px 11px; border-radius:999px; border:1px solid var(--line2); background:var(--card); color:var(--dim)}
+  .chip b{color:var(--text)}
+  #q{
+    width:260px; font-size:14px; padding:8px 12px; border-radius:9px;
+    border:1px solid var(--line2); background:var(--card); color:var(--text); outline:none;
+  }
+  #q:focus{border-color:var(--accent)}
+  main{display:grid; grid-template-columns:minmax(300px,380px) 1fr; gap:0; flex:1; min-height:0}
+  aside{border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0}
+  .filters{padding:12px 16px; border-bottom:1px solid var(--line); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  select{
+    font-size:13px; padding:6px 9px; border-radius:8px; border:1px solid var(--line2);
+    background:var(--card); color:var(--text); outline:none;
+  }
+  #list{overflow-y:auto; flex:1; padding:8px 10px 14px; scrollbar-width:thin; scrollbar-color:#2c3f61 transparent}
+  .item{
+    display:flex; gap:10px; align-items:center; padding:9px 10px; border-radius:10px; cursor:pointer;
+    border:1px solid transparent;
+  }
+  .item:hover{background:var(--card); border-color:var(--line)}
+  .item.sel{background:var(--card2); border-color:var(--accent)}
+  .dot{width:9px; height:9px; border-radius:50%; flex:none}
+  .item .nm{font-size:14px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .item .ct{font-size:12px; color:var(--dim2); flex:none}
+  .item .cmp{
+    flex:none; font-size:13px; width:24px; height:24px; border-radius:7px; border:1px solid var(--line2);
+    background:var(--bg2); color:var(--dim); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .item .cmp.on{background:var(--accent); color:#0b1220; border-color:var(--accent); font-weight:700}
+  .tray{padding:10px 14px; border-top:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap; min-height:0}
+  .tray .tchip{font-size:12px; padding:4px 9px; border-radius:999px; background:var(--card2); border:1px solid var(--line2)}
+  .tray button{
+    font-size:12.5px; padding:6px 12px; border-radius:8px; border:1px solid var(--accent);
+    background:var(--accent); color:#0b1220; font-weight:600; cursor:pointer;
+  }
+  .tray button:disabled{background:var(--card); color:var(--dim2); border-color:var(--line2); cursor:default}
+  .tray .hint{font-size:12px; color:#8fa2c2; margin-left:auto}
+  section.panel{overflow-y:auto; padding:20px 24px; min-height:0; scrollbar-width:thin; scrollbar-color:#2c3f61 transparent}
+  h2{font-size:17px; margin-bottom:10px}
+  .kv{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 14px}
+  .k{font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid var(--line2); background:var(--card); color:var(--dim)}
+  .desc{font-size:13.5px; color:var(--dim); line-height:1.55; max-width:760px}
+  h3{font-size:13px; letter-spacing:1.4px; text-transform:uppercase; color:var(--dim2); margin:20px 0 8px}
+  .rel{display:flex; flex-direction:column; gap:6px; max-width:760px}
+  .relrow{display:flex; gap:10px; align-items:center; font-size:13px; padding:7px 10px; border-radius:9px; background:var(--card); border:1px solid var(--line)}
+  .relrow .w{margin-left:auto; font-size:11.5px; color:var(--dim2)}
+  .kindtag{font-size:10.5px; padding:2px 8px; border-radius:999px; border:1px solid var(--line2); color:var(--dim)}
+  .relrow a{color:var(--accent); text-decoration:none; cursor:pointer}
+  .relrow a:hover{text-decoration:underline}
+  ul.samples{list-style:none; display:flex; flex-direction:column; gap:5px; max-width:900px}
+  ul.samples li{font-size:12.5px}
+  ul.samples a{color:#9fc3ff; text-decoration:none; word-break:break-all}
+  ul.samples a:hover{text-decoration:underline}
+  .empty{color:var(--dim2); font-size:13.5px; padding:30px 0}
+  .graphwrap{border-top:1px solid var(--line); background:var(--bg2)}
+  .graphhead{display:flex; align-items:center; gap:14px; padding:10px 24px 4px}
+  .graphhead h3{margin:0}
+  .graphhead .note{font-size:11.5px; color:var(--dim2)}
+  #graph{display:block; width:100%; height:400px}
+  #graph circle.node{cursor:pointer}
+  #graph text{fill:var(--dim); font-size:10.5px; pointer-events:none; paint-order:stroke; stroke:#0b1220; stroke-width:2.5px; stroke-linejoin:round}
+  #graph text.hot{fill:var(--text); font-weight:600}
+  #graph line{stroke:#3b527a}
+  .cmp-grid{display:grid; gap:16px; grid-auto-flow:column; grid-auto-columns:minmax(230px,1fr); overflow-x:auto; padding-bottom:8px}
+  .cmp-card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px}
+  .cmp-card h4{font-size:15px; margin-bottom:2px}
+  .cmp-card .sub{font-size:12px; color:var(--dim2); margin-bottom:10px}
+  .cmp-card .line{font-size:12.5px; color:var(--dim); margin:4px 0}
+  .sharedline{font-size:13px; margin-top:14px; padding:10px 12px; border-radius:10px; background:var(--card2); border:1px solid var(--line2)}
+  .welcome{max-width:640px}
+  .welcome p{font-size:13.5px; color:var(--dim); line-height:1.6; margin-bottom:10px}
+  .welcome b{color:var(--text)}
+  footer{font-size:11.5px; color:var(--dim2); padding:8px 26px 12px; border-top:1px solid var(--line)}
+  @media (max-width:900px){
+    main{grid-template-columns:1fr}
+    aside{border-right:none; border-bottom:1px solid var(--line); max-height:44vh}
+    #q{width:100%}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>Tech <span>Atlas</span></h1>
+    <div class="sub">Technologies mined from a bookmark corpus — search, compare, explore relations</div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <input id="q" type="search" placeholder="Search technologies…" autocomplete="off">
+</header>
+
+<main>
+  <aside>
+    <div class="filters">
+      <select id="kf"><option value="">all kinds</option></select>
+      <select id="sf">
+        <option value="count">sort: bookmarks</option>
+        <option value="domains">sort: domains</option>
+        <option value="name">sort: name</option>
+      </select>
+    </div>
+    <div id="list"></div>
+    <div class="tray" id="tray">
+      <span class="hint">click “+” on technologies to compare</span>
+    </div>
+  </aside>
+  <section class="panel" id="panel"></section>
+</main>
+
+<div class="graphwrap">
+  <div class="graphhead">
+    <h3>Relation graph · top 40</h3>
+    <span class="note">node size = bookmarks · line = co-occurs in same folder/tag · click a node to inspect</span>
+  </div>
+  <svg id="graph" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
+
+<footer>Generated by <code>tech-atlas</code>. Data: ui/data/graph.json (regenerate with <code>python run.py export</code>).</footer>
+
+<script src="data/graph.js" onerror="window.__noData=1"></script>
+<script>
+const KIND_COLORS = {
+  frontend:'#6ea8ff', backend:'#8bd450', language:'#ffd166', runtime:'#5ee0c8',
+  database:'#ff9f6b', infra:'#b98bff', cloud:'#7fd1ff', ai:'#ff6b9d',
+  platform:'#9aa7bd', tooling:'#c0c8d8', protocol:'#e0c878', os:'#88a0c0', site:'#8fa3c0'
+};
+const color = k => KIND_COLORS[k] || KIND_COLORS.site;
+
+let DATA = null, byId = new Map(), adj = new Map(), selected = null, compare = [], mode = 'welcome';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function boot(){
+  DATA = window.ATLAS_DATA || null;
+  if(!DATA){
+    try { DATA = await (await fetch('./data/graph.json')).json(); }
+    catch(e){
+      $('#panel').innerHTML = '<div class="empty">No data found. Run <code>python run.py demo</code> (or <code>ingest</code>+<code>build</code>+<code>export</code>) first, then reload this page.</div>';
+      return;
+    }
+  }
+  buildIndex();
+  renderStats();
+  renderFilters();
+  renderList();
+  renderGraph();
+  renderPanel();
+}
+
+function buildIndex(){
+  byId = new Map(DATA.nodes.map(n => [n.id, n]));
+  adj = new Map(DATA.nodes.map(n => [n.id, []]));
+  for(const e of DATA.edges){
+    if(adj.has(e.source) && adj.has(e.target)){
+      adj.get(e.source).push({other:e.target, kind:e.kind, weight:e.weight});
+      adj.get(e.target).push({other:e.source, kind:e.kind, weight:e.weight});
+    }
+  }
+  for(const [, arr] of adj) arr.sort((a,b) => b.weight - a.weight);
+}
+
+function renderStats(){
+  const s = DATA.stats;
+  $('#stats').innerHTML =
+    `<span class="chip"><b>${s.bookmarks.toLocaleString()}</b> bookmarks</span>` +
+    `<span class="chip"><b>${s.domains.toLocaleString()}</b> domains</span>` +
+    `<span class="chip"><b>${s.technologies.toLocaleString()}</b> technologies</span>` +
+    `<span class="chip"><b>${s.relations.toLocaleString()}</b> relations</span>`;
+}
+
+function renderFilters(){
+  const kinds = Object.keys(DATA.kinds).sort();
+  $('#kf').innerHTML = '<option value="">all kinds</option>' +
+    kinds.map(k => `<option value="${esc(k)}">${esc(k)} (${DATA.kinds[k]})</option>`).join('');
+  $('#kf').onchange = renderList;
+  $('#sf').onchange = renderList;
+  $('#q').oninput = renderList;
+}
+
+function filtered(){
+  const q = $('#q').value.trim().toLowerCase();
+  const kf = $('#kf').value;
+  const sf = $('#sf').value;
+  let items = DATA.nodes.filter(n =>
+    (!kf || n.kind === kf) &&
+    (!q || n.name.toLowerCase().includes(q) || n.id.includes(q)));
+  items.sort((a,b) => sf === 'name' ? a.name.localeCompare(b.name) :
+                       sf === 'domains' ? b.domains - a.domains :
+                       b.count - a.count);
+  return items;
+}
+
+function renderList(){
+  const items = filtered();
+  const el = $('#list');
+  el.innerHTML = items.map(n => `
+    <div class="item ${selected===n.id?'sel':''}" data-id="${esc(n.id)}">
+      <span class="dot" style="background:${color(n.kind)}"></span>
+      <span class="nm">${esc(n.name)}</span>
+      <span class="ct">${n.count}</span>
+      <span class="cmp ${compare.includes(n.id)?'on':''}" data-cmp="${esc(n.id)}" title="add to compare">${compare.includes(n.id)?'✓':'+'}</span>
+    </div>`).join('') || '<div class="empty">No matches.</div>';
+  el.querySelectorAll('.item').forEach(node => {
+    node.addEventListener('click', ev => {
+      if(ev.target.dataset.cmp !== undefined){ toggleCompare(ev.target.dataset.cmp); return; }
+      selected = node.dataset.id; mode='detail'; renderList(); renderPanel(); highlightGraph();
+    });
+  });
+  renderTray();
+}
+
+function toggleCompare(id){
+  const i = compare.indexOf(id);
+  if(i >= 0) compare.splice(i,1);
+  else if(compare.length < 3) compare.push(id);
+  renderList();
+  if(mode === 'compare') renderPanel();
+}
+
+function renderTray(){
+  const tray = $('#tray');
+  if(!compare.length){
+    tray.innerHTML = '<span class="hint">click “+” on technologies to compare</span>';
+    return;
+  }
+  tray.innerHTML = compare.map(id => `<span class="tchip" style="border-color:${color(byId.get(id)?.kind)}">${esc(byId.get(id)?.name || id)}</span>`).join('') +
+    `<button id="goCmp" ${compare.length<2?'disabled':''}>Compare ${compare.length}</button>` +
+    `<button id="clrCmp" style="background:var(--card);color:var(--dim);border-color:var(--line2)">clear</button>`;
+  const go = $('#goCmp'); if(go) go.onclick = () => { mode='compare'; renderPanel(); };
+  $('#clrCmp').onclick = () => { compare = []; renderList(); if(mode==='compare'){mode='welcome'; renderPanel();} };
+}
+
+function renderPanel(){
+  const p = $('#panel');
+  if(mode === 'detail' && selected && byId.has(selected)){
+    const n = byId.get(selected);
+    const rel = adj.get(n.id) || [];
+    p.innerHTML = `
+      <h2>${esc(n.name)} <span class="kindtag">${esc(n.kind)}</span></h2>
+      <div class="kv">
+        <span class="k"><b>${n.count}</b>&nbsp;bookmarks</span>
+        <span class="k"><b>${n.domains}</b>&nbsp;domains</span>
+        <span class="k">id: ${esc(n.id)}</span>
+        ${n.website ? `<span class="k"><a href="${esc(n.website)}" target="_blank" rel="noopener" style="color:var(--accent)">official site ↗</a></span>` : ''}
+      </div>
+      ${n.description ? `<p class="desc">${esc(n.description)}</p>` :
+        `<p class="desc">No description yet — run <code>python run.py enrich</code> to pull one from Wikidata, or add it to seed metadata.</p>`}
+      <h3>Related technologies (${rel.length})</h3>
+      <div class="rel">
+        ${rel.slice(0,24).map(r => {
+          const o = byId.get(r.other);
+          return `<div class="relrow">
+            <span class="dot" style="background:${color(o?.kind)}"></span>
+            <a data-nav="${esc(r.other)}">${esc(o?.name || r.other)}</a>
+            <span class="kindtag">${esc(r.kind)}</span>
+            <span class="w">strength ${r.weight}</span>
+          </div>`;
+        }).join('') || '<div class="empty">No relations yet — import more bookmarks or lower MIN_PAIR_WEIGHT.</div>'}
+      </div>
+      <h3>Sample bookmarks</h3>
+      <ul class="samples">${(n.samples||[]).map(u => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a></li>`).join('') || '<li class="empty">none captured</li>'}</ul>`;
+    p.querySelectorAll('[data-nav]').forEach(a =>
+      a.onclick = () => { selected = a.dataset.nav; mode='detail'; renderList(); renderPanel(); highlightGraph(); });
+  } else if(mode === 'compare' && compare.length >= 1){
+    const sets = compare.map(id => new Set((adj.get(id)||[]).map(r => r.other)));
+    const shared = compare.length >= 2 ? [...sets[0]].filter(x => sets.slice(1).every(s => s.has(x))) : [];
+    p.innerHTML = `<h2>Compare (${compare.length})</h2>
+      <div class="cmp-grid">
+      ${compare.map(id => {
+        const n = byId.get(id), rel = (adj.get(id)||[]).slice(0,10);
+        return `<div class="cmp-card" style="border-top:3px solid ${color(n.kind)}">
+          <h4>${esc(n.name)}</h4>
+          <div class="sub">${esc(n.kind)}</div>
+          <div class="line"><b>${n.count}</b> bookmarks · <b>${n.domains}</b> domains</div>
+          <div class="line">${esc(n.description || '—')}</div>
+          <div class="line" style="margin-top:8px;color:var(--dim2)">top related:</div>
+          ${rel.map(r => `<div class="line">→ ${esc(byId.get(r.other)?.name || r.other)} <span style="color:var(--dim2)">(${r.weight})</span></div>`).join('') || '<div class="line">—</div>'}
+        </div>`;
+      }).join('')}
+      </div>
+      ${compare.length>=2 ? `<div class="sharedline"><b>Shared connections:</b> ${shared.length ? shared.map(s => esc(byId.get(s)?.name || s)).join(', ') : 'none at this strength threshold'}</div>` : ''}`;
+  } else {
+    p.innerHTML = `<div class="welcome">
+      <h2>Turn 1,000,000 bookmarks into a technology atlas</h2>
+      <p><b>Pick a technology</b> in the list to see what it is, how often it appears in your corpus, which other technologies it lives next to, and sample links.</p>
+      <p><b>Compare</b> up to three: click “+” on list items, then Compare. Shared connections show where they intersect.</p>
+      <p><b>The graph</b> below lays out the 60 most-bookmarked technologies; stronger coils mean they repeatedly share folders/tags — a proxy for “these belong to the same mental stack”.</p>
+      <p style="color:var(--dim2)">Everything here is derived from your own bookmarks — no page fetching required. Run <code>enrich</code> to optionally pull descriptions from Wikidata.</p>
+    </div>`;
+  }
+}
+
+function ellipsePoints(cx, cy, ax, ay, n, halfStepRotate){
+  // Points at equal ARC LENGTH around an ellipse (angle-uniform spacing crowds
+  // the flat sides; arc-uniform spacing keeps neighbours evenly apart).
+  const S = 2000, samples = [];
+  let total = 0, prev = null;
+  for(let i = 0; i <= S; i++){
+    const t = i/S * Math.PI * 2;
+    const x = cx + ax * Math.cos(t), y = cy + ay * Math.sin(t);
+    if(prev) total += Math.hypot(x - prev.x, y - prev.y);
+    samples.push({x, y, s: total});
+    prev = {x, y};
+  }
+  const step = total / n, shift = halfStepRotate ? step / 2 : 0;
+  const out = [];
+  for(let k = 0; k < n; k++){
+    const target = (k * step + shift) % total;
+    let lo = 0, hi = S;
+    while(lo < hi){ const mid = (lo + hi) >> 1; if(samples[mid].s < target) lo = mid + 1; else hi = mid; }
+    out.push(samples[lo]);
+  }
+  return out;
+}
+
+function renderGraph(){
+  const svg = $('#graph');
+  const W = 1200, H = 400, cx = W/2, cy = 205;
+  const top = DATA.nodes.slice(0, 40);
+  const outerN = Math.ceil(top.length / 2), innerN = Math.floor(top.length / 2);
+  const outerPts = ellipsePoints(cx, cy, 515, 140, outerN, false);
+  const innerPts = ellipsePoints(cx, cy, 415, 102, innerN, true);  // half-step rotated
+  const pos = new Map();
+  top.forEach((n, i) => {
+    const outer = i % 2 === 0;
+    const p = outer ? outerPts[i >> 1] : innerPts[i >> 1];
+    pos.set(n.id, {x: p.x, y: p.y, n, outer, topHalf: p.y < cy});
+  });
+  const maxW = Math.max(1, ...DATA.edges.map(e => e.weight));
+  const lines = DATA.edges.filter(e => pos.has(e.source) && pos.has(e.target)).map(e => {
+    const p1 = pos.get(e.source), p2 = pos.get(e.target);
+    const o = 0.15 + 0.55 * (e.weight / maxW);
+    const w = e.kind === 'alternative' ? 2.6 : 1.8;
+    const dash = e.kind === 'alternative' ? ' stroke-dasharray="5 3"' : '';
+    return `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke-opacity="${o.toFixed(2)}" stroke-width="${w}"${dash}></line>`;
+  }).join('');
+  const maxC = Math.max(1, ...top.map(n => n.count));
+  const nodes = top.map(n => {
+    const p = pos.get(n.id);
+    const r = 4 + 12 * Math.sqrt(n.count / maxC);
+    // Outer ring labels point away from the centre; inner ring labels point
+    // toward it — neighbours end up on different rows, avoiding collisions.
+    const away = p.topHalf ? -1 : 1;
+    const side = p.outer ? away : -away;
+    const ly = p.y + side * (r + 11);
+    const label = n.name.length > 13 ? n.name.slice(0, 12) + '…' : n.name;
+    return `<circle class="node" data-id="${esc(n.id)}" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r.toFixed(1)}"
+      fill="${color(n.kind)}" fill-opacity="0.85" stroke="#0b1220" stroke-width="1.2">
+      <title>${esc(n.name)} — ${n.count} bookmarks, ${n.domains} domains</title></circle>
+      <text x="${p.x.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" class="${n.count > maxC*0.25 ? 'hot':''}">${esc(label)}</text>`;
+  }).join('');
+  svg.innerHTML = lines + nodes;
+  svg.querySelectorAll('circle.node').forEach(c => c.addEventListener('click', () => {
+    selected = c.dataset.id; mode='detail'; renderList(); renderPanel(); highlightGraph();
+  }));
+}
+
+function highlightGraph(){
+  const svg = $('#graph');
+  svg.querySelectorAll('circle.node').forEach(c => {
+    const on = c.dataset.id === selected;
+    c.setAttribute('stroke', on ? '#ffffff' : '#0b1220');
+    c.setAttribute('stroke-width', on ? 2.6 : 1.2);
+  });
+  svg.querySelectorAll('text').forEach(t => t.classList.toggle('hot', false));
+}
+
+boot();
+</script>
+</body>
+</html>
