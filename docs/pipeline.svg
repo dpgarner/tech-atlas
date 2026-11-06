@@ -1,0 +1,121 @@
+<svg width="1600" height="880" viewBox="0 0 1600 880" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16233f"/>
+      <stop offset="0.6" stop-color="#0b1220"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#141e34"/>
+      <stop offset="1" stop-color="#101828"/>
+    </linearGradient>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4f6da3"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="880" fill="url(#bg)"/>
+
+  <text x="47" y="64" fill="#e6edf7" font-size="32" font-weight="700">tech-atlas <tspan fill="#6ea8ff">pipeline</tspan></text>
+  <text x="47" y="96" fill="#9fb0cc" font-size="16">Turning a corpus of ~1,000,000 bookmarked URLs into an explorable technology atlas — search, compare, relate.</text>
+  <rect x="1290" y="42" rx="999" ry="999" width="263" height="34" fill="#10241b" stroke="#2f5b46"/>
+  <text x="1421" y="64" fill="#a8ffce" font-size="14" text-anchor="middle">no crawling of 1M pages</text>
+
+  <text x="47" y="150" fill="#7d8fb0" font-size="13" letter-spacing="2">STAGE 1 · INGEST AND NORMALISE</text>
+  <text x="830" y="150" fill="#7d8fb0" font-size="13" letter-spacing="2">STAGE 2 · IDENTIFY AND CONNECT</text>
+
+  <!-- Stage cards -->
+  <g>
+    <rect x="47" y="180" width="226" height="250" rx="14" fill="url(#card)" stroke="#24344f"/>
+    <circle cx="73" cy="207" r="12" fill="#6ea8ff"/><text x="73" y="212" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">1</text>
+    <text x="93" y="212" fill="#e6edf7" font-size="17" font-weight="600">Ingest</text>
+    <text x="63" y="246" fill="#9fb0cc" font-size="12.5">Stream browser exports:</text>
+    <text x="63" y="266" fill="#9fb0cc" font-size="12.5">Netscape HTML (Chrome, Edge,</text>
+    <text x="63" y="286" fill="#9fb0cc" font-size="12.5">Firefox, Safari), Pocket and</text>
+    <text x="63" y="306" fill="#9fb0cc" font-size="12.5">Raindrop JSON.</text>
+    <text x="63" y="338" fill="#8fa2c2" font-size="12">1M rows never held in memory —</text>
+    <text x="63" y="358" fill="#8fa2c2" font-size="12">chunked parse, batched inserts.</text>
+    <text x="63" y="390" fill="#cddaf0" font-size="12.5">bookmarks table</text>
+
+    <rect x="303" y="180" width="226" height="250" rx="14" fill="url(#card)" stroke="#24344f"/>
+    <circle cx="329" cy="207" r="12" fill="#6ea8ff"/><text x="329" y="212" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">2</text>
+    <text x="349" y="212" fill="#e6edf7" font-size="17" font-weight="600">Normalise</text>
+    <text x="319" y="246" fill="#9fb0cc" font-size="12.5">Canonical URL (strip utm,</text>
+    <text x="319" y="266" fill="#9fb0cc" font-size="12.5">fragments, trailing junk), host,</text>
+    <text x="319" y="286" fill="#9fb0cc" font-size="12.5">registrable domain, and a "site"</text>
+    <text x="319" y="306" fill="#9fb0cc" font-size="12.5">identity key.</text>
+    <text x="319" y="338" fill="#8fa2c2" font-size="12">github.com/owner/repo stays</text>
+    <text x="319" y="358" fill="#8fa2c2" font-size="12">distinct from github.com.</text>
+    <text x="319" y="390" fill="#cddaf0" font-size="12.5">sites table</text>
+
+    <rect x="559" y="180" width="226" height="250" rx="14" fill="url(#card)" stroke="#24344f"/>
+    <circle cx="585" cy="207" r="12" fill="#6ea8ff"/><text x="585" y="212" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">3</text>
+    <text x="605" y="212" fill="#e6edf7" font-size="17" font-weight="600">Aggregate</text>
+    <text x="575" y="246" fill="#9fb0cc" font-size="12.5">Deduplicate across folders and</text>
+    <text x="575" y="266" fill="#9fb0cc" font-size="12.5">exports; count bookmarks per</text>
+    <text x="575" y="286" fill="#9fb0cc" font-size="12.5">site; keep sample titles.</text>
+    <text x="575" y="338" fill="#8fa2c2" font-size="12">Frequency = attention. Whatever</text>
+    <text x="575" y="358" fill="#8fa2c2" font-size="12">you saved 200 times matters.</text>
+    <text x="575" y="390" fill="#cddaf0" font-size="12.5">domains by weight</text>
+
+    <rect x="835" y="180" width="226" height="250" rx="14" fill="url(#card)" stroke="#24344f"/>
+    <circle cx="861" cy="207" r="12" fill="#b98bff"/><text x="861" y="212" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">4</text>
+    <text x="881" y="212" fill="#e6edf7" font-size="17" font-weight="600">Resolve</text>
+    <text x="851" y="246" fill="#9fb0cc" font-size="12.5">Fold many brands into one</text>
+    <text x="851" y="266" fill="#9fb0cc" font-size="12.5">technology: react.dev +</text>
+    <text x="851" y="286" fill="#9fb0cc" font-size="12.5">reactjs.org + facebook/react</text>
+    <text x="851" y="306" fill="#9fb0cc" font-size="12.5">→ React.</text>
+    <text x="851" y="338" fill="#8fa2c2" font-size="12">Alias map + category taxonomy</text>
+    <text x="851" y="358" fill="#8fa2c2" font-size="12">(language, database, AI, infra).</text>
+    <text x="851" y="390" fill="#cddaf0" font-size="12.5">technologies table</text>
+
+    <rect x="1091" y="180" width="226" height="250" rx="14" fill="url(#card)" stroke="#24344f"/>
+    <circle cx="1117" cy="207" r="12" fill="#b98bff"/><text x="1117" y="212" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">5</text>
+    <text x="1137" y="212" fill="#e6edf7" font-size="17" font-weight="600">Relate</text>
+    <text x="1107" y="246" fill="#9fb0cc" font-size="12.5">Co-occurrence: technologies</text>
+    <text x="1107" y="266" fill="#9fb0cc" font-size="12.5">sharing a folder or tag are part</text>
+    <text x="1107" y="286" fill="#9fb0cc" font-size="12.5">of the same mental stack.</text>
+    <text x="1107" y="318" fill="#9fb0cc" font-size="12.5">Comparison: titles that say</text>
+    <text x="1107" y="338" fill="#9fb0cc" font-size="12.5">"A vs B" or "alternative to".</text>
+    <text x="1107" y="390" fill="#cddaf0" font-size="12.5">relations table</text>
+
+    <rect x="1347" y="180" width="206" height="250" rx="14" fill="url(#card)" stroke="#3a5688"/>
+    <circle cx="1373" cy="207" r="12" fill="#8fb8ff"/><text x="1373" y="212" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">6</text>
+    <text x="1393" y="212" fill="#eaf2ff" font-size="17" font-weight="600">Explore</text>
+    <text x="1363" y="246" fill="#9fb0cc" font-size="12.5">One JSON file drives the UI:</text>
+    <text x="1363" y="266" fill="#9fb0cc" font-size="12.5">search, side-by-side compare,</text>
+    <text x="1363" y="286" fill="#9fb0cc" font-size="12.5">relation graph, sample links.</text>
+    <text x="1363" y="338" fill="#8fa2c2" font-size="12">SQLite stays the source of</text>
+    <text x="1363" y="358" fill="#8fa2c2" font-size="12">truth; re-export any time.</text>
+    <text x="1363" y="390" fill="#cddaf0" font-size="12.5">graph.json + UI</text>
+  </g>
+
+  <!-- Arrows -->
+  <line x1="273" y1="305" x2="297" y2="305" stroke="#4f6da3" stroke-width="2.4" marker-end="url(#arr)"/>
+  <line x1="529" y1="305" x2="553" y2="305" stroke="#4f6da3" stroke-width="2.4" marker-end="url(#arr)"/>
+  <line x1="785" y1="305" x2="829" y2="305" stroke="#4f6da3" stroke-width="2.4" marker-end="url(#arr)"/>
+  <line x1="1061" y1="305" x2="1085" y2="305" stroke="#4f6da3" stroke-width="2.4" marker-end="url(#arr)"/>
+  <line x1="1317" y1="305" x2="1341" y2="305" stroke="#4f6da3" stroke-width="2.4" marker-end="url(#arr)"/>
+
+  <!-- Bottom panels -->
+  <rect x="47" y="490" width="746" height="330" rx="14" fill="#0e1626" stroke="#24344f"/>
+  <text x="75" y="530" fill="#e6edf7" font-size="17" font-weight="600">What the atlas answers</text>
+  <text x="75" y="562" fill="#9fb0cc" font-size="13.5">•  "Where in my 1M bookmarks does X live, and how much of it did I save?"</text>
+  <text x="75" y="592" fill="#9fb0cc" font-size="13.5">•  "What sits next to X in my folders — which technologies form a stack together?"</text>
+  <text x="75" y="622" fill="#9fb0cc" font-size="13.5">•  "X vs Y — what did I already save on that comparison?"</text>
+  <text x="75" y="652" fill="#9fb0cc" font-size="13.5">•  "Which technologies am I tracking that I never actually organise?"</text>
+  <text x="75" y="682" fill="#9fb0cc" font-size="13.5">•  "Which AI tools, databases, or frameworks cluster with each other across tags?"</text>
+  <text x="75" y="738" fill="#8fa2c2" font-size="12.5">Signals are passive: derived from URLs, folders, tags and titles you already have.</text>
+  <text x="75" y="760" fill="#8fa2c2" font-size="12.5">Optional enrichment (Wikidata descriptions) runs only for the top-N head of the distribution.</text>
+
+  <rect x="833" y="490" width="720" height="330" rx="14" fill="#0e1626" stroke="#24344f"/>
+  <text x="861" y="530" fill="#e6edf7" font-size="17" font-weight="600">Built for 1M rows on one machine</text>
+  <text x="861" y="568" fill="#cddaf0" font-size="13.5">Streaming ingest  <tspan fill="#8fa2c2">— chunked HTML/JSON parse, no full-corpus load.</tspan></text>
+  <text x="861" y="600" fill="#cddaf0" font-size="13.5">Single SQLite file  <tspan fill="#8fa2c2">— WAL mode, indexed on site, brand, folder.</tspan></text>
+  <text x="861" y="632" fill="#cddaf0" font-size="13.5">Bounded pair counting  <tspan fill="#8fa2c2">— catch-all folders pruned (fan-out guard).</tspan></text>
+  <text x="861" y="664" fill="#cddaf0" font-size="13.5">Head-only enrichment  <tspan fill="#8fa2c2">— top ~200 techs get Wikidata; tail stays cheap.</tspan></text>
+  <text x="861" y="696" fill="#cddaf0" font-size="13.5">Rebuildable  <tspan fill="#8fa2c2">— build/relations re-run in minutes; export is one file.</tspan></text>
+  <text x="861" y="748" fill="#8fa2c2" font-size="12.5">Swap SQLite for DuckDB/Postgres only if you outgrow single-machine analytics.</text>
+  <text x="861" y="770" fill="#8fa2c2" font-size="12.5">Compare layer pairs with the bookmark-manager stack for collection, archiving and search.</text>
+
+  <text x="47" y="862" fill="#7d8fb0" font-size="12">tech-atlas · atlas/ package: urls → ingest → pipeline (domains, resolve, relations) → enrich → export → ui/</text>
+</svg>

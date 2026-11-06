@@ -1,0 +1,23 @@
+{
+  "react": "frontend",
+  "vue": "frontend",
+  "nextjs": "frontend",
+  "tailwind": "frontend",
+  "node": "runtime",
+  "python": "language",
+  "typescript": "language",
+  "django": "backend",
+  "fastapi": "backend",
+  "postgres": "database",
+  "mongodb": "database",
+  "redis": "database",
+  "kubernetes": "infra",
+  "docker": "infra",
+  "ollama": "ai",
+  "openai": "ai",
+  "anthropic": "ai",
+  "huggingface": "ai",
+  "llama": "ai",
+  "langchain": "ai",
+  "github": "platform"
+}
