@@ -14,22 +14,22 @@ def ingest_rows(con, rows, canonicalize, identity, to_epoch):
         if not canon or canon in seen:
             continue
         seen.add(canon)
-        host, registrable, brand, method = identity(canon)
+        host, registrable, brand, method, site = identity(canon)
         batch.append((
-            row.get("url", ""), canon, host, registrable, brand, method,
+            row.get("url", ""), canon, host, registrable, brand, method, site,
             (row.get("title") or "")[:512], (row.get("folder") or "")[:512],
             (row.get("tags") or "")[:512], to_epoch(row.get("add_date")),
         ))
         n += 1
         if len(batch) >= 5000:
             con.executemany(
-                "INSERT INTO bookmarks(url,url_canonical,host,registrable,brand,method,title,folder,tags,add_date)"
-                " VALUES(?,?,?,?,?,?,?,?,?,?)", batch)
+                "INSERT INTO bookmarks(url,url_canonical,host,registrable,brand,method,site,title,folder,tags,add_date)"
+                " VALUES(?,?,?,?,?,?,?,?,?,?,?)", batch)
             batch = []
     if batch:
         con.executemany(
-            "INSERT INTO bookmarks(url,url_canonical,host,registrable,brand,method,title,folder,tags,add_date)"
-            " VALUES(?,?,?,?,?,?,?,?,?,?)", batch)
+            "INSERT INTO bookmarks(url,url_canonical,host,registrable,brand,method,site,title,folder,tags,add_date)"
+            " VALUES(?,?,?,?,?,?,?,?,?,?,?)", batch)
     con.commit()
     return {"ingested": n}
 
@@ -37,10 +37,10 @@ def ingest_rows(con, rows, canonicalize, identity, to_epoch):
 def build_domains(con):
     con.execute("DELETE FROM domains")
     con.execute(
-        "INSERT INTO domains(registrable, host_sample, brand, method, bookmark_count, title_sample) "
-        "SELECT registrable, MIN(host), MIN(brand), MIN(method), COUNT(*), MIN(title) "
-        "FROM bookmarks WHERE registrable IS NOT NULL AND registrable <> '' "
-        "GROUP BY registrable"
+        "INSERT INTO domains(site, registrable, host_sample, brand, method, bookmark_count, title_sample) "
+        "SELECT site, MIN(registrable), MIN(host), MIN(brand), MIN(method), COUNT(*), MIN(title) "
+        "FROM bookmarks WHERE site IS NOT NULL AND site <> '' "
+        "GROUP BY site"
     )
     con.commit()
     return {"domains": con.execute("SELECT COUNT(*) c FROM domains").fetchone()["c"]}
@@ -54,12 +54,12 @@ def resolve_technologies(con, resolver):
 
     techs = {}
     dom_rows = list(con.execute(
-        "SELECT registrable, brand, method, bookmark_count FROM domains"))
+        "SELECT site, registrable, brand, method, bookmark_count FROM domains"))
     for row in dom_rows:
         key = resolver.key(row["brand"])
         t = techs.setdefault(key, {"brands": set(), "domains": set(), "bookmarks": 0})
         t["brands"].add(row["brand"])
-        t["domains"].add((row["registrable"], row["method"] or "", row["bookmark_count"]))
+        t["domains"].add((row["site"], row["registrable"], row["method"] or "", row["bookmark_count"]))
         t["bookmarks"] += row["bookmark_count"]
 
     for key, t in techs.items():
@@ -70,8 +70,8 @@ def resolve_technologies(con, resolver):
              ",".join(sorted(t["brands"])), len(t["domains"]), t["bookmarks"]),
         )
         con.executemany(
-            "INSERT INTO tech_domains(tech_key,registrable,method,bookmarks) VALUES(?,?,?,?)",
-            [(key, reg, method, cnt) for (reg, method, cnt) in t["domains"]],
+            "INSERT INTO tech_domains(tech_key,site,registrable,method,bookmarks) VALUES(?,?,?,?,?)",
+            [(key, site, reg, method, cnt) for (site, reg, method, cnt) in t["domains"]],
         )
 
     batch = []

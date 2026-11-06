@@ -57,5 +57,12 @@ def export_graph(con, out_path: str, top_edges: int = 6000, samples_per_tech: in
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(payload, fh, ensure_ascii=False, separators=(",", ":"))
+    # Also emit a JS wrapper so the UI can be opened directly via file:// without
+    # fetch/CORS restrictions (double-click friendly).
+    js_path = os.path.splitext(out_path)[0] + ".js"
+    with open(js_path, "w", encoding="utf-8") as fh:
+        fh.write("window.ATLAS_DATA = ")
+        json.dump(payload, fh, ensure_ascii=False, separators=(",", ":"))
+        fh.write(";\n")
     return {"out": out_path, "nodes": len(nodes), "edges": len(edges),
             "bytes": os.path.getsize(out_path)}

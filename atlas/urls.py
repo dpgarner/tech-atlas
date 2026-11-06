@@ -94,12 +94,12 @@ def root_label(registrable: str) -> str:
 
 
 def identity(canonical: str):
-    """Derive (host, registrable, brand, method) for a canonical URL.
+    """Derive (host, registrable, brand, method, site) for a canonical URL.
 
-    brand is the raw candidate technology identity:
-      - github.com/acme/widget      -> brand 'widget', method 'repo'
-      - docs.docker.com             -> brand 'docker', method 'domain'
-      - news.ycombinator.com        -> brand 'ycombinator', method 'aggregator'
+    site is the aggregation key for "who owns this link":
+      - github.com/acme/widget      -> site 'github.com/acme/widget', brand 'widget'
+      - docs.docker.com             -> site 'docker.com', brand 'docker'
+      - news.ycombinator.com        -> site 'ycombinator.com', method 'aggregator'
     """
     parts = urlsplit(canonical)
     host = (parts.hostname or "").lower()
@@ -107,11 +107,13 @@ def identity(canonical: str):
     segs = [s for s in parts.path.split("/") if s]
 
     if registrable in REPO_HOSTS and len(segs) >= 2:
-        return host, registrable, _clean_repo_name(segs[1]), "repo"
+        owner = segs[0].lower()
+        repo = _clean_repo_name(segs[1])
+        return host, registrable, repo, "repo", f"{registrable}/{owner}/{repo}"
 
     brand = root_label(registrable)
     method = "aggregator" if registrable in AGGREGATOR_HOSTS else "domain"
-    return host, registrable, brand, method
+    return host, registrable, brand, method, registrable
 
 
 def _clean_repo_name(seg: str) -> str:

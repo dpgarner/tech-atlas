@@ -20,19 +20,23 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     registrable   TEXT,
     brand         TEXT,
     method        TEXT,           -- repo | domain | aggregator
+    site          TEXT,           -- aggregation key (repo-level for code hosts)
     title         TEXT,
     folder        TEXT,
     tags          TEXT,
     add_date      INTEGER
 );
+CREATE INDEX IF NOT EXISTS ix_bm_site        ON bookmarks(site);
 CREATE INDEX IF NOT EXISTS ix_bm_registrable ON bookmarks(registrable);
 CREATE INDEX IF NOT EXISTS ix_bm_brand       ON bookmarks(brand);
 CREATE INDEX IF NOT EXISTS ix_bm_folder      ON bookmarks(folder);
 
 CREATE TABLE IF NOT EXISTS domains (
-    registrable    TEXT PRIMARY KEY,
+    site           TEXT PRIMARY KEY,
+    registrable    TEXT,
     host_sample    TEXT,
     brand          TEXT,
+    method         TEXT,
     bookmark_count INTEGER,
     title_sample   TEXT
 );
@@ -51,6 +55,7 @@ CREATE TABLE IF NOT EXISTS technologies (
 
 CREATE TABLE IF NOT EXISTS tech_domains (
     tech_key   TEXT,
+    site       TEXT,
     registrable TEXT,
     method     TEXT,
     bookmarks  INTEGER
@@ -85,7 +90,24 @@ def connect(path: str) -> sqlite3.Connection:
     con = sqlite3.connect(path)
     con.row_factory = sqlite3.Row
     con.executescript(SCHEMA)
+    _migrate(con)
     return con
+
+
+def _migrate(con: sqlite3.Connection) -> None:
+    """Light-touch migrations so older stores keep working."""
+    cols = {r[1] for r in con.execute("PRAGMA table_info(bookmarks)")}
+    if cols and "site" not in cols:
+        con.execute("ALTER TABLE bookmarks ADD COLUMN site TEXT")
+    dcols = {r[1] for r in con.execute("PRAGMA table_info(domains)")}
+    if dcols and "site" not in dcols:
+        con.execute("DROP TABLE domains")
+        con.execute(
+            "CREATE TABLE domains (site TEXT PRIMARY KEY, registrable TEXT, "
+            "host_sample TEXT, brand TEXT, method TEXT, bookmark_count INTEGER, "
+            "title_sample TEXT)"
+        )
+    con.commit()
 
 
 def reset(path: str) -> None:

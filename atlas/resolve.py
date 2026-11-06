@@ -31,6 +31,7 @@ DEFAULT_ALIASES = {
     "dotnet": "dotnet", "csharp": "dotnet",
     "cpp": "cpp", "cplusplus": "cpp",
     "docker": "docker", "dockerhub": "docker",
+    "caddy": "caddy", "caddyserver": "caddy",
     "kubernetes": "kubernetes", "k8s": "kubernetes",
     "postgres": "postgres", "postgresql": "postgres", "psql": "postgres",
     "mysql": "mysql", "mariadb": "mysql",
@@ -67,6 +68,12 @@ DISPLAY = {
     "vscode": "VS Code", "openai": "OpenAI", "anthropic": "Anthropic",
     "huggingface": "Hugging Face", "pytorch": "PyTorch", "tensorflow": "TensorFlow",
     "graphql": "GraphQL", "grpc": "gRPC", "nocodb": "NocoDB", "llamaindex": "LlamaIndex",
+    "caddy": "Caddy", "clickhouse": "ClickHouse", "duckdb": "DuckDB",
+    "esbuild": "esbuild", "hashicorp": "HashiCorp", "fastapi": "FastAPI",
+    "vllm": "vLLM", "llama": "LLaMA", "linkwarden": "Linkwarden",
+    "karakeep": "Karakeep", "linkding": "linkding", "linkstack": "LinkStack",
+    "wallabag": "wallabag", "firecrawl": "Firecrawl", "docmost": "Docmost",
+    "meilisearch": "Meilisearch", "sqlite": "SQLite", "redis": "Redis",
 }
 
 # Seed category taxonomy: tech key -> high-level bucket ("how it relates").
